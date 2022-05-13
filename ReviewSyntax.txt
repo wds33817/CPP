@@ -1,0 +1,662 @@
+// Cpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
+//
+
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream> // cin / cout / scanf / printif
+#include <cmath> // double sqrt(double x), double pow(double x, double y), long int abs(long int x), double fabs(double x);
+#include <cstdio> // compile speed is much faster than iostream
+// 万能头文件  #include <bits/stdc++.h>
+#include <cstring>
+using namespace std;
+//全局变量的值为0
+//全局变量存在堆空间  无长度限制
+//堆里虚拟分配， 使用再开内存， 没开的时候标记全都指向0，零页
+//堆 数据 /栈 指令
+
+
+const double eps = 1e-6;
+int main()
+{
+    /*
+     int x = 3;
+    printf("%.30lf\n", sqrt(x) * sqrt(x));
+    if (sqrt(x) * sqrt(x) != x) puts("!=");
+    if (fabs(sqrt(x) * sqrt(x) - x) <= eps)
+        puts("equals.");
+    return 0;
+    */
+    /*
+    int n = 3;
+    while (n--) {
+        cout << "not bad";
+        cout << "\n";
+    }
+    */
+    /*
+    int x = 0;
+    while (cin >> x && x) { // check 2 conditions
+        cout << "print";
+    }
+    */
+    
+    /*
+    int x = 0;
+    while (cin >> x, x) {  // -1 , -2 means true
+        cout << "print";
+    }
+    */
+    
+    /*
+    int x = 0;
+    while (scanf("%d", &x) && x > 0) {  // check 1 && 2 conditions
+        cout << "print";
+    }
+    */
+    
+    /*
+    int x = 0;
+    while (~scanf("%d", &x)) {  // check if it is EOF, USE A FILE READ;
+        cout << "print";
+    }
+    */
+    
+
+    /*
+        欧几里得距离 / 曼哈顿距离 / 切比雪夫距离：
+
+        1.欧几里得距离
+
+        计算公式（n维空间下）
+
+        二维：dis=sqrt( (x1-x2)2 + (y1-y2)2)
+
+        三维：dis=sqrt((x1-x2)2 + (y1-y2)2 + (z1-z2)2)
+
+        2.曼哈顿距离：两个点在标准坐标系上的绝对轴距总和
+
+        dis=abs(x1-x2)+abs(y1-y2) => 菱形[AcWing 727]
+
+        3.切比雪夫距离：各坐标数值差的最大值
+
+        dis=max(abs(x1-x2), abs(y1-y2))
+        ————————————————
+        break 可以提前从循环中退出，一般与if语句搭配。
+        continue 可以直接跳到当前循环体的结尾。作用与if语句类似。
+    
+    */
+    // 局部变量的值是随机的
+    // 局部变量存在栈空间，1M左右
+    /*
+    int a[3] = { 0, 1, 2 };
+    int b[] = {0, 1, 2}; // length is 3 array;
+    int c[5] = { 0, 1, 2 }; // {0, 1, 2, 0, 0}
+    char d[3] = { 'a', 'b', 'c' };
+    int e[10] = { 0 }; // init {0, 0, ... , 0}
+    */
+    
+    // #include <cstring>
+    // int a[10];
+
+    // memset (数组名， 将每个字节初始化成什么值， 初始多长（单位byte））
+    // memset()初始化： -> 比循环赋值效率高
+    // memset(a, 0, sizeof a);
+    // memset(a, -1, sizeof a); //将数组a赋为全-1
+    // 如果memset(a, 1, 40)，是将每一个Byte赋为1，而一个int为4Byte
+    // 此时初始化后的数组值写作二进制为0000 0001 0000 0001 0000 0001 0000 0001
+    
+    /*
+    #include <cstring>
+    int a[10], b[10];
+    // memcpy(目标数组名， 源数组名， 源数组Byte长度)
+    memcpy(b, a, sizeof a);
+    */
+
+    /*
+    高精度运算2n：
+    #include <iostream>
+    using namespace std;
+    const int N = 3010;
+    int main()
+    {
+        int a[N] = {1};
+        int n;
+        cin >> n;
+        int m =1;
+        // 低位放0
+        for(int i=0;i<n;i++)
+        {
+            int t = 0; //判断进位
+            for(int j=0;j<n;j++)
+            {
+                t += a[j] * 2;
+                a[j] = t % 10;
+                t /= 10;
+            }
+            if(t) a[m++] = 1;
+        }
+        for(i=m-1;i>=0;i--) cout << a[i];
+        cout << endl;
+        return 0;
+    }
+
+    */
+
+    /*
+    多维数组： 数组的数组
+
+    回形矩阵：
+
+    每一个格子到上下左右四条边的距离最小值
+    蛇形矩阵：
+
+    偏移量思想 => left / right / top / bottom => 模拟移动过程
+    撞墙 => 出界 / 重复
+    移动 => 向右走，横坐标不变，纵坐标+1，即(0, 1)；同理，向下走(1, 0)，向左走(0, -1)，向上走(-1, 0)
+    #include <iostream>
+
+    using namespace std;
+
+    int res[100][100];
+
+    int main()
+    {
+        int n, m;
+        cin >> n >> m;
+
+        int dx[] = {0, 1, 0, -1}, dy[] = {1, 0, -1, 0};
+
+        for (int x = 0, y = 0, d = 0, k = 1; k <= n * m; k ++ )
+        {
+            res[x][y] = k;
+            int a = x + dx[d], b = y + dy[d];
+            if (a < 0 || a >= n || b < 0 || b >= m || res[a][b])
+            {
+                d = (d + 1) % 4;
+                a = x + dx[d], b = y + dy[d];
+            }
+            x = a, y = b;
+        }
+
+        for (int i = 0; i < n; i ++ )
+        {
+            for (int j = 0; j < m; j ++ ) cout << res[i][j] << ' ';
+            cout << endl;
+        }
+
+        return 0;
+    }
+    
+    */
+
+
+    /*
+    ASCII码：
+
+    48 ~ 57 ： 0 ~ 9
+    65 ~ 90 ： A ~ Z
+    97 ~ 127 ： a ~ z
+    字符数组：
+
+    字符串是字符数组加上结束符"\0"，字符数组长度至少比字符串多1。
+
+     char a1[] = {'C', '+', '+', '\0'};
+     char a2[] = "C++";
+     cout << sizeof a2 << endl; // 4
+
+     char a1[] = {'a', 'b', 'c', '\0'};
+     cout << a1 << endl; // 从a开始输出
+     cout << a1 + 1 << endl; // 从b开始输出
+     cout << a1 + 2 << endl; // 从c开始输出
+
+
+     // 三个函数
+    #include <string.h>
+    char a[100], b[100];
+    strlen(a);
+    strcmp(a, b); // a<b 返回-1; a==b 返回0; a>b 返回1
+    strcpy(a, b); // 把b赋给a
+
+
+
+    字符串输入/输出：
+    //字符数组
+    char s[100];
+    // 读到空格或回车为止
+    scanf("%s", s);
+    cin >> s;
+    // 读入空格
+    fgets(s, 10000000, stdin);
+    cin.getline(s, 100); // 一行最多
+    // string型
+    string s;
+    // 读入空格
+    getlin(cin, s);
+    // 输出
+    puts(s);
+    printf("%s\n", s);
+    cout << s << endl;
+
+
+    标准库类型string：
+    #include <string>
+
+    // 初始化
+    string s1; // 默认空字符串
+    string s2 = s1; // s2是s1的一个副本
+    string s2 = "hiya"; // s3是该字符串字面值的一个副本
+    string s4(10, 'c'); // s4的内容是cccccccccc
+
+    //读入/输出
+    //不能用scanf读入，但可以用printf输出
+    cin >> s1;
+    getline(cin, s1);
+    printf("%s", s1.c_str()); // 返回存储s1的字符数组的首地址，用printf输出
+    puts(s1);
+
+    s1.empty(); // 判断是否为空字符串
+    s1.size(); // 效果如s1.length(), O(1)
+    s1.pop_back; // 删掉最后一个字符
+
+    // 按字典序比较
+    // 加法拼接时，要保证加号两边至少有一个string变量
+
+    for(char c : s) cout << c << endl; // 顺次遍历
+    for(char &c : s) c = 'a'; // 可以改变
+
+    auto s; // 可以自动判别类型
+
+
+
+    第一类双指针算法：
+    从前向后遍历整个字符串
+    for(i=0;i<len;i++)
+    {
+        //用j把和s[i]相等的这一整段全部找到
+        int j = i；
+        while(j<len&&s[j]==s[i]) j++;
+        //j是不等于i的第一个字符
+        i = j-1;
+    }
+
+    stringstream：
+    #include <iostream>
+    #include <string>
+    #include <sstream>
+    using namespace std;
+    int main()
+    {
+        string s;
+        //123 xxx 321 123.1
+        getline(cin, s);
+        stringstream ssin(s); //把字符串初始化为字符串流，类似cin的一个东西，把ssin当成cin即可，从s中提取出任意需要的格式的信息
+
+        int a, b;
+        string str;
+        double c;
+
+        ssin >> a >> str >> b >> c;
+        //123/xxx/321/123.1
+        cout << a << '/' << str << '/' << b << '/' << c << endl;
+    }
+
+
+
+
+
+    第六讲 函数
+    组成部分:
+    // 函数声明（不需要写函数体)
+    int foo(int n);
+    // 函数定义（需要写函数体）
+    int foo(int n) //返回类型 函数名（参数列表）
+    {
+        函数体;
+        return 返回值;
+    }
+
+    static：
+    开到堆空间里，等于在函数内部声明了一个仅由该函数使用的全部变量
+    sizeof：
+    int main()里是a[n]数组指针，sizeof a返回整个数组的长度
+    自定义函数(例如：int foo(int a[]))，a[]是数组的指针，sizeof a只是指针的大小。
+
+    内联函数inline：
+    inline void foo(int b[])编译器不调用，出现该函数的地方替换成函数体内容，可以提高运行速度
+    解空间为树状结构时，考虑递推/递归
+
+
+
+
+
+    第七讲 结构体、类、指针、引用
+    结构体、类：
+    在C++中，类似于class，在其中既可以定义数据成员，又可以定义成员函数。
+    在C++中，struct与class基本是通用的，唯一不同的是如果使用class关键字，类中定义的成员变量或成员函数默认都是private属性的，而采用struct关键字，结构体中定义的成员变量或成员函数默认都是public属性的。
+    通常，和数据相关的用struct，复杂抽象的用class。
+    C++构造函数的函数名必须和类名相同。与类构造函数一样，结构体的构造函数必须是与结构体名称相同的公共成员函数，并且没有返回类型。
+    
+    指针：
+    每一个程序都是一个进程，不同进程间是相互独立的，每个程序相当于一个大数组，所有的变量、代码、调用都是在这个数组里操作的，定义的变量是数组里的值，指针是数组的下标
+    int a = 10;
+    //这个*表示定义的p是个指针类型，但变量的名字是p，可以理解为(int*) p
+    int *p = a; //表示p是int类型变量的指针，让p的值等于a的地址
+    cout << *p << endl; //这个*取地址中存放的值，*p表示取到a的值
+    *p = 12; //相当于通过下标修改数组值
+    //指针的指针是存放指针的地址
+    int b[5] = {1, 2, 3, 4, 5};//b 数组指针，存数组开始位置
+    char c[3] = {'a', 'b', 'c'};//c 默认字符串，（void*）c 输出地址
+
+    引用：
+    int &p = a; //int& p = a
+    p = 12; //a=12
+    //引用相当于给变量起了个别名
+
+
+    C++primer中对 对象的定义：对象是指一块能存储数据并具有某种类型的内存空间。
+    一个对象a，它有值和地址&a，运行程序时，计算机会为该对象分配存储空间，来存储该对象的值，我们通过该对象的地址，来访问存储空间中的值
+    指针p也是对象，它同样有地址&p和存储的值p，只不过，p存储的数据类型是数据的地址。如果我们要以p中存储的数据为地址，来访问对象的值，则要在p前加解引用操作符"",即p。
+    对象有常量（const）和变量之分，既然指针本身是对象，那么指针所存储的地址也有常量和变量之分，指针常量是指，指针这个对象所存储的地址是不可以改变的，而指向常量的指针的意思是，不能通过该指针来改变这个指针所指向的对象。
+    我们可以把引用理解成变量的别名。定义一个引用的时候，程序把该引用和它的初始值绑定在一起，而不是拷贝它。计算机必须在声明r的同时就要对它初始化，并且，r一经声明，就不可以再和其它对象绑定在一起了。
+    实际上，你也可以把引用看做是通过一个常量指针来实现的，它只能绑定到初始化它的对象上。
+    关于指针和引用的对比，可以参看<<more effective C++>>中的第一条条款，引用的一个优点是它一定不为空，因此相对于指针，它不用检查它所指对象是否为空，这增加了效率
+    比如下面的代码
+    int a,b,*p,&r=a;//正确
+    r=3;//正确：等价于a=3
+    int &rr;//出错：引用必须初始化
+    p=&a;//正确：p中存储a的地址，即p指向a
+    *p=4;//正确：p中存的是a的地址，对a所对应的存储空间存入值4
+    p=&b//正确：p可以多次赋值，p存储b的地址
+
+
+    链表：
+    struct Node
+    {
+        int val;
+        Node *next;
+
+        Node(int _val) : val(_val), next(NULL) {}
+    };
+    int main()
+    {
+        Node a = Node(1); // 返回的是值
+        Node* p = &a;
+        // a.val p->next
+        Node* p = new Node(1); // 返回的是地址，动态开辟一段空间，把空间的地址赋给p
+        Node* q = new Node(2);
+        Node* o = new Node(3);
+        p->next = q;
+        q->next = o;
+    }
+
+    链表：
+    struct Node
+    {
+        int val;
+        Node *next;
+
+        Node(int _val) : val(_val), next(NULL) {}
+    };
+    int main()
+    {
+        Node a = Node(1); // 返回的是值
+        Node* p = &a;
+        // a.val p->next
+        Node* p = new Node(1); // 返回的是地址，动态开辟一段空间，把空间的地址赋给p
+        Node* q = new Node(2);
+        Node* o = new Node(3);
+        p->next = q;
+        q->next = o;
+    }
+
+
+    第八讲 STL容器、位运算与常用库函数
+    vector：(倍增)
+
+    #include <vector>
+    在数组末尾插入删除O ( 1 ) O(1)O(1)，在开头插入删除O ( n ) O(n)O(n)。
+    迭代器类似数组下标或指针。
+
+    // 定义
+    vector<int> a;
+    a.size();
+    a.empty();
+    a.clear();
+
+    struct Rec
+    {
+        int x;
+        int y;
+    };
+    vector<Rec> b;
+    // 迭代器
+    vector<int>::iterator it; // 随机迭代器
+    a.begin(); // a的第一个元素的迭代器/地址
+    a.end(); // a的最后一个元素的下个位置的地址
+    it 访问 a[0];
+    it + 2 访问 a[2];
+    想取到迭代器的值，则加*;
+    *a.begin()等价于a[0]等价于a.front();
+    a.back()等价于a[a.size()-1], a.end()指向a的最后一个元素后一个地址;
+    a.push_back(); // 把元素x插入到vector a的尾部。
+    a.pop_back(); // 删除vector a的最后一个元素。
+
+
+    // 三种遍历方法
+    vector<int> a({1, 2, 3});
+    for(int i=0;i<a.size();i++) cout << a[i] << ' ' << endl;
+    cout << endl;
+    for(vector<int>::iterator i=a.begin();i!=a.end();i++) cout << *i << ' ';
+    cout << endl;
+    for(int x : a) cout << x << ' ';
+    cout << endl;
+
+    queue：先进先出
+
+    #include <queue>主要包括循环队列queue和优先队列priority_queue(堆)两个容器。
+    队列：先进先出，queue<int> a
+    优先队列：又称大根堆，优先出最大值，priority_queue<int> b;
+    小根堆：优先出最小值，priority_queue<int, vector<int>, greater<int>> c;
+    priority_queue<pair<int, int>> m; // pair二元组
+    1
+    定义结构体类型的大根堆必须重载小于号<。
+    struct Rec
+    {
+        int a, b;
+        bool operator< (const Rec& t) const
+        {
+            return a < t.a;
+        }
+    };
+    priority_queue<int> d;
+
+    定义结构体类型的小根堆必须重载大于号>。
+    struct Rec
+    {
+        int a, b;
+        bool operator> (const Rec& t) const
+        {
+            return a > t.a;
+        }
+    };
+    priority_queue<int, vector<int>, greater<int>> d;
+
+    queue操作
+    queue<int> q;
+    q.push(1); //在队尾插入一个元素
+    q.pop(); //弹出队头元素
+    q.front(); //返回队头元素
+    q.back(); //返回队尾元素
+    q = queue<int>(); //初始化即可清空
+
+    大根堆操作
+    priority_queue<int> q;
+    q.push(); //把元素插入堆
+    q.pop(); //删除堆顶元素
+    q.top(); //查询堆顶元素（最大值）
+
+    除了队列、优先队列、栈之外，其他所有STL容器均有clear()函数
+    stack：先进后出
+
+    #include <stack>
+    stack<int> stk;
+    stk.push(1); //向栈顶插入
+    stk.top(); //得到栈顶元素值
+    stk.pop(); //弹出栈顶元素（最后一个插入的元素）
+
+    deque双端队列：随机存储
+
+    扩展版vector，deque在数组开头/结尾插入删除都是O ( 1 ) O(1)O(1)的。
+    #include <deque>
+    deque<int> a;
+    a.begin();a.end(); //返回deque的头/尾迭代器
+    a.front();a.badk(); //队头/队尾元素
+    a.push_back(1); //从队尾入队
+    a.push_front(2); //从队头入队
+    a.pop_back(); //从队尾出队
+    a.pop_front(); //从队头出队
+    a.clear(); //清空队列
+    a[0]; //随机访问
+
+    set：维护有序序列
+
+    #include <set>
+    set<int> a; //元素不能重复
+    multiset<int> b; //元素可以重复
+
+    重载小于号
+    //因为set中间会做比较，所以结构体中需要重载小于号
+    struct Rec
+    {
+        int x, y;
+        bool operator< (const Rec& t) const
+        {
+            return x < t.x;
+        }
+    };
+    set<int> Rec;
+
+    迭代器
+    set<int> a;
+    set<int>::iterator it = a.begin(); //仅支持”++”和--“两个与算术相关的操作
+
+    set/multiset操作
+    s.insert(x); //把一个元素x插入到集合s中，时间复杂度为O(logn)。
+    s.find(x); //在集合s中查找等于x的元素，并返回指向该元素的迭代器。若不存在，则返回s.end()。
+    s.lower_bound(x); //查找大于等于x的元素中最小的一个，并返回指向该元素的迭代器。
+    s.upper_bound(x); //查找大于x的元素中最小的一个，并返回指向该元素的迭代器。
+    s.erase(); //删除
+
+        设it是一个迭代器，s.erase(it) 从s中删除迭代器it指向的元素，时间复杂度为O(logn).
+        设x是一个元素，s.erase(x) 从s中删除所有等于x的元素，时间复杂度为O(k+logn)，其中k是被删除的元素个数。
+
+    s.count(x); //返回集合s中等于x的元素个数，时间复杂度为O(k +logn)，其中k为元素x的个数。
+
+    unordered_set：无序set 底层实现哈希表
+
+    #inlcude <unordered_set>，其中没有lower_bound()和upper_bound()
+    #inlcude <unordered_multiset>
+    map：
+
+    #include <map>
+    map<int, int> a; //和数组类似
+    //Map的key和value可以是任意类型，其中key必须定义小于号运算符。
+    map<string, vector<int>> b;
+    a["test"] = vector<int>({ 1, 2, 3, 4 });
+    cout << a["test"][2] << endl; //3
+    cout << a["test"].size() << endl; //4
+
+    size / empty / clear / begin / end均与set类似。
+    Insert / erase与set类似，但其参数均是pair<key_type, value_type>。
+    h.find(x) 在变量名为h的map中查找key为x的二元组。
+    []操作符
+    h[key] 返回key映射的value的引用，时间复杂度为O(logn)。
+    []操作符是map最吸引人的地方。我们可以很方便地通过h[key]来得到key对应的value，还可以对h[key]进行赋值操作，改变key对应的value。
+
+    bitset：位运算 很长的二进制01串
+
+    #include <bitset>
+    bitset<1000> a;
+    a.set(); //全部设为1
+    a.reset(); //全部设为0
+
+    pair：
+    a.first()和a.second分别输出第一个和第二个值
+    pair<int, string> a;
+    a = { 3, "test" };
+    a = make_pair(4, "check"); //c++99的赋值
+
+    位运算：
+
+    与& 或 | 取反 ~异或 ^
+
+    左移 << ：a << k = > a * 2k
+
+    右移 >> ：a >> k = > a / 2k
+
+    常用操作：
+
+    (1) 求x的第k位数字 x >> k & 1
+
+    (2) lowbit(x) = x & -x，返回x的最后一位1(x & (~x + 1))
+
+    常用库函数：
+
+    (1) reverse 翻转
+
+    翻转一个vector：
+
+    reverse(a.begin(), a.end());
+
+    翻转一个数组，元素存放在下标1~n：
+
+    reverse(a + 1, a + 1 + n);
+
+    (2) unique 去重
+
+    返回去重之后的尾迭代器（或指针），仍然为前闭后开，即这个迭代器是去重之后末尾元素的下一个位置。该函数常用于离散化，利用迭代器（或指针）的减法，可计算出去重后的元素个数。
+
+    把一个vector去重：
+
+    int m = unique(a.begin(), a.end()) – a.begin();
+
+    把一个数组去重，元素存放在下标1~n：
+
+    int m = unique(a + 1, a + 1 + n) –(a + 1);
+
+    a.erase(unique(a.begin(), a.end()), a.end()) //输出去重后的数组
+
+    (3) random_shuffle 随机打乱
+
+    用法与reverse相同
+    (4) sort
+
+    对两个迭代器（或指针）指定的部分进行快速排序。可以在第三个参数传入定义大小比较的函数，或者重载“小于号”运算符。
+    把一个int数组（元素存放在下标1~n）从大到小排序，传入比较函数：
+    int a[MAX_SIZE];
+    bool cmp(int a, int b) { return a > b; } a是否应该排在b的前面，true应该，false不应该
+    sort(a + 1, a + 1 + n, cmp);
+
+    把自定义的结构体vector排序，重载“小于号”运算符：
+    struct rec { int id, x, y; }
+    vector<rec> a;
+    bool operator <(const rec& a, const rec& b) {
+        return a.x < b.x || a.x == b.x && a.y < b.y;
+    }
+    sort(a.begin(), a.end());
+
+    (5) lower_bound / upper_bound 二分
+
+    lower_bound 的第三个参数传入一个元素x，在两个迭代器（指针）指定的部分上执行二分查找，返回指向第一个大于等于x的元素的位置的迭代器（指针）。
+
+    upper_bound 的用法和lower_bound大致相同，唯一的区别是查找第一个大于x的元素。当然，两个迭代器（指针）指定的部分应该是提前排好序的。
+
+    在有序int数组（元素存放在下标1~n）中查找大于等于x的最小整数的下标：
+
+    int I = lower_bound(a + 1, a + 1 + n, . x) – a;
+
+    在有序vector<int> 中查找小于等于x的最大整数（假设一定存在）：
+
+    `int y = *–upper_bound(a.begin(), a.end(), x);
+    */
+    
+}
