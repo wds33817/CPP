@@ -1,5 +1,5 @@
 // Cpp.cpp : This file contains the 'main' function. Program execution begins and ends there.
-//
+//https://blog.csdn.net/PxxxxN/article/details/113032355?spm=1001.2014.3001.5502
 
 #define _CRT_SECURE_NO_WARNINGS
 #include <iostream> // cin / cout / scanf / printif
